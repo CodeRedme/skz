@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Code Red: STAY Strong 💖</title>
+  <style>
+    :root {
+      --bg-morning: #ffe6ec;
+      --bg-afternoon: #ffd6e7;
+      --bg-evening: #ffccd5;
+      --bg-night: #eeb8d4;
+      --bg-dark: #1a1a1a;
+      --text-light: #f4f4f4;
+      --skz-pink: #ff77aa;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg-morning);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      transition: background 0.8s ease, color 0.5s ease;
+    }
+
+    body.dark {
+      background-color: var(--bg-dark);
+      color: var(--text-light);
+    }
+
+    header {
+      background-color: var(--skz-pink);
+      width: 100%;
+      padding: 20px;
+      text-align: center;
+      color: white;
+      font-size: 2rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    .container {
+      max-width: 700px;
+      background: #fff;
+      margin: 30px;
+      padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.12);
+      transition: background 0.3s ease;
+    }
+
+    .dark .container {
+      background: #333;
+      color: var(--text-light);
+    }
+
+    label {
+      font-weight: 600;
+      margin-top: 10px;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    button {
+      background-color: var(--skz-pink);
+      color: white;
+      padding: 12px 22px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 10px 5px 0 0;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #ff4d8a;
+    }
+
+    .tips {
+      background-color: #fff0f5;
+      padding: 15px;
+      border-left: 5px solid var(--skz-pink);
+      border-radius: 10px;
+      margin-top: 25px;
+    }
+
+    .dark .tips {
+      background-color: #292929;
+      color: var(--text-light);
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 0.9rem;
+      color: #888;
+      background-color: #fff;
+      width: 100%;
+    }
+
+    .dark footer {
+      background-color: #111;
+      color: #aaa;
+    }
+
+    .help-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #d63384;
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 1rem 1.5rem;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+      z-index: 1000;
+      transition: background 0.3s ease;
+    }
+
+    .help-button:hover {
+      background-color: #b82e6e;
+    }
+
+    #lastEntry, #entryList {
+      margin-top: 20px;
+      font-style: italic;
+      background-color: #fff6f9;
+      padding: 10px;
+      border-left: 4px solid var(--skz-pink);
+      border-radius: 6px;
+    }
+
+    .dark #lastEntry, .dark #entryList {
+      background-color: #2a2a2a;
+    }
+  </style>
+</head>
+<body>
+  <header>🩸 Code Red - STAY Strong</header>
+
+  <div class="container">
+    <p>Hi STAY! 🌸 Use this tracker made with My + SKZ love to track your period kindly. 🫶</p>
+
+    <label for="date">📅 Period Start Date:</label>
+    <input type="date" id="date" />
+
+    <label for="length">🩲 Period Length (in days):</label>
+    <input type="number" id="length" min="1" max="10" placeholder="Usually 4–7 days" />
+
+    <label for="cycle">🔁 Cycle Length (in days):</label>
+    <input type="number" id="cycle" min="20" max="40" placeholder="Default is 28 if unsure" />
+
+    <label for="mood">🎭 Mood Today:</label>
+    <select id="mood">
+      <option>😐 Meh</option>
+      <option>😭 Crybaby mode</option>
+      <option>😤 Angry Felix</option>
+      <option>😎 Chill like Chan</option>
+      <option>😌 Peaceful like Seungmin</option>
+    </select>
+
+    <label for="notes">📝 Notes:</label>
+    <textarea id="notes" rows="4" placeholder="Light cramps, watched SKZ VLive, wanted chocolate..."></textarea>
+
+    <button onclick="saveEntry()">💾 Save Entry</button>
+    <button onclick="viewAllEntries()">📖 View All Entries</button>
+    <button onclick="toggleDarkMode()">🌓 Toggle Mode</button>
+
+    <div id="entryList"></div>
+
+    <div class="tips">
+      <strong>🌼 Period Self-Care Tips (SKZ style):</strong>
+      <ul>
+        <li>Listen to "Slump" and cry it out 😭</li>
+        <li>Heat pad + hoodie = comfort 🔥</li>
+        <li>Hydrate like Hyunjin hydrates his skin 💧</li>
+        <li>Watch Chan’s Room or 2 Kids Room 🛋️</li>
+        <li>Rest. You’re our bias, remember that 👑</li>
+      </ul>
+    </div>
+  </div>
+
+  <button class="help-button" onclick="showHelp()">🩸 Need Help?</button>
+
+  <footer>
+    Created by Tulika Soni 🌷 x STAY project 💗<br/>
+    <span class="license">
+      © 2025. “Code Red” licensed under
+      <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a>
+    </span>
+  </footer>
+
+  <script>
+    function saveEntry() {
+      const date = document.getElementById('date').value;
+      const length = document.getElementById('length').value;
+      const cycle = document.getElementById('cycle').value || 28;
+      const mood = document.getElementById('mood').value;
+      const notes = document.getElementById('notes').value;
+
+      if (!date || !length) {
+        alert('Please fill out the period start date and length!');
+        return;
+      }
+
+      const entries = JSON.parse(localStorage.getItem('codeRedEntries') || '[]');
+
+      const entry = {
+        date,
+        length: parseInt(length),
+        cycle: parseInt(cycle),
+        mood,
+        notes,
+        nextPeriod: calculateNextPeriod(date, parseInt(cycle))
+      };
+
+      entries.push(entry);
+      localStorage.setItem('codeRedEntries', JSON.stringify(entries));
+      alert('Entry saved, bestie! 💖');
+    }
+
+    function viewAllEntries() {
+      const list = document.getElementById('entryList');
+      const entries = JSON.parse(localStorage.getItem('codeRedEntries') || '[]');
+
+      if (!entries.length) {
+        list.innerHTML = 'No previous entries found.';
+        return;
+      }
+
+      list.innerHTML = '<strong>📚 Your Code Red Log:</strong><br><ul>' +
+        entries.map(entry => `
+          <li>
+            📅 <strong>${entry.date}</strong> → 
+            Lasted <strong>${entry.length}d</strong>, 
+            Mood: ${entry.mood}, 
+            Notes: ${entry.notes || 'None'}, 
+            Next: <strong>${entry.nextPeriod}</strong>
+          </li>
+        `).join('') + '</ul>';
+    }
+
+    function calculateNextPeriod(startDate, cycleLength) {
+      const date = new Date(startDate);
+      date.setDate(date.getDate() + cycleLength);
+      return date.toISOString().split('T')[0];
+    }
+
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark");
+      document.querySelector(".container").classList.toggle("dark");
+      document.querySelector(".tips").classList.toggle("dark");
+      document.querySelector("footer").classList.toggle("dark");
+    }
+
+    function showHelp() {
+      alert(`🌸 First Time? Don’t panic, STAY 💖\n\n🩲 Pads:\n→ Stick onto underwear.\n→ Change every 4–6 hours.\n\n🧴 Tampons:\n→ Insert using applicator.\n→ Change every 4–8 hours.\n→ DO NOT sleep with one in!\n\n🥣 Menstrual Cups:\n→ Fold, insert.\n→ Empty every 8–12 hours.\n→ Wash + sterilize.\n\n💡 Tip: Binge "SKZ Code" and rest like royalty. You've got this 💪`);
+    }
+
+    function updateBackground() {
+      const hour = new Date().getHours();
+      const root = getComputedStyle(document.documentElement);
+      const body = document.body;
+
+      if (hour >= 5 && hour < 12) {
+        body.style.backgroundColor = root.getPropertyValue('--bg-morning');
+      } else if (hour >= 12 && hour < 17) {
+        body.style.backgroundColor = root.getPropertyValue('--bg-afternoon');
+      } else if (hour >= 17 && hour < 20) {
+        body.style.backgroundColor = root.getPropertyValue('--bg-evening');
+      } else {
+        body.style.backgroundColor = root.getPropertyValue('--bg-night');
+      }
+    }
+
+    updateBackground();
+  </script>
+</body>
+</html>
