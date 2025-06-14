@@ -13,6 +13,8 @@
       --bg-dark: #1a1a1a;
       --text-light: #f4f4f4;
       --skz-pink: #ff77aa;
+      --skz-red: #b30000;
+      --skz-black: #0a0a0a;
     }
 
     body {
@@ -29,7 +31,7 @@
     }
 
     body.dark {
-      background-color: var(--bg-dark);
+      background: linear-gradient(to bottom right, var(--skz-black), var(--skz-red));
       color: var(--text-light);
     }
 
@@ -138,17 +140,24 @@
       background-color: #b82e6e;
     }
 
-    #lastEntry, #entryList {
+    #entryList {
       margin-top: 20px;
-      font-style: italic;
+    }
+
+    .entry-item {
+      margin-bottom: 10px;
       background-color: #fff6f9;
       padding: 10px;
       border-left: 4px solid var(--skz-pink);
       border-radius: 6px;
     }
 
-    .dark #lastEntry, .dark #entryList {
+    .dark .entry-item {
       background-color: #2a2a2a;
+    }
+
+    audio {
+      display: none;
     }
   </style>
 </head>
@@ -183,6 +192,7 @@
     <button onclick="viewAllEntries()">📖 View All Entries</button>
     <button onclick="toggleDarkMode()">🌓 Toggle Mode</button>
 
+    <div id="playlist"></div>
     <div id="entryList"></div>
 
     <div class="tips">
@@ -196,7 +206,9 @@
       </ul>
     </div>
   </div>
-
+  <a href="https://ko-fi.com/skzoo71231" target="_blank">
+      <img src="https://cdn.ko-fi.com/cdn/kofi5.png" alt="Buy Me a Chai on Ko-fi" height="45" style="border:0px; margin-top: 20px;"/>
+    </a>
   <button class="help-button" onclick="showHelp()">🩸 Need Help?</button>
 
   <footer>
@@ -206,6 +218,8 @@
       <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a>
     </span>
   </footer>
+
+  <audio id="skzAudio" src="https://cdn.pixabay.com/download/audio/2023/04/17/audio_21e4e1cb9d.mp3?filename=sfx-voice-goodjob-14415.mp3"></audio>
 
   <script>
     function saveEntry() {
@@ -234,6 +248,8 @@
       entries.push(entry);
       localStorage.setItem('codeRedEntries', JSON.stringify(entries));
       alert('Entry saved, bestie! 💖');
+      document.getElementById('skzAudio').play();
+      suggestPlaylist(mood);
     }
 
     function viewAllEntries() {
@@ -245,16 +261,24 @@
         return;
       }
 
-      list.innerHTML = '<strong>📚 Your Code Red Log:</strong><br><ul>' +
-        entries.map(entry => `
-          <li>
+      list.innerHTML = '<strong>📚 Your Code Red Log:</strong><br>' +
+        entries.map((entry, index) => `
+          <div class="entry-item">
             📅 <strong>${entry.date}</strong> → 
             Lasted <strong>${entry.length}d</strong>, 
             Mood: ${entry.mood}, 
             Notes: ${entry.notes || 'None'}, 
             Next: <strong>${entry.nextPeriod}</strong>
-          </li>
-        `).join('') + '</ul>';
+            <br><button onclick="deleteEntry(${index})">❌ Delete</button>
+          </div>
+        `).join('');
+    }
+
+    function deleteEntry(index) {
+      const entries = JSON.parse(localStorage.getItem('codeRedEntries') || '[]');
+      entries.splice(index, 1);
+      localStorage.setItem('codeRedEntries', JSON.stringify(entries));
+      viewAllEntries();
     }
 
     function calculateNextPeriod(startDate, cycleLength) {
@@ -265,13 +289,27 @@
 
     function toggleDarkMode() {
       document.body.classList.toggle("dark");
-      document.querySelector(".container").classList.toggle("dark");
-      document.querySelector(".tips").classList.toggle("dark");
-      document.querySelector("footer").classList.toggle("dark");
     }
 
     function showHelp() {
       alert(`🌸 First Time? Don’t panic, STAY 💖\n\n🩲 Pads:\n→ Stick onto underwear.\n→ Change every 4–6 hours.\n\n🧴 Tampons:\n→ Insert using applicator.\n→ Change every 4–8 hours.\n→ DO NOT sleep with one in!\n\n🥣 Menstrual Cups:\n→ Fold, insert.\n→ Empty every 8–12 hours.\n→ Wash + sterilize.\n\n💡 Tip: Binge "SKZ Code" and rest like royalty. You've got this 💪`);
+    }
+
+    function suggestPlaylist(mood) {
+      const playlist = document.getElementById("playlist");
+      let suggestion = "";
+      if (mood.includes("Crybaby")) {
+        suggestion = "💿 Try: Slump, 19, Another Day";
+      } else if (mood.includes("Angry")) {
+        suggestion = "💿 Try: Dominos, Freeze, Red Lights";
+      } else if (mood.includes("Chill")) {
+        suggestion = "💿 Try: Chill, Airplane, Wow";
+      } else if (mood.includes("Peaceful")) {
+        suggestion = "💿 Try: Star Lost, Your Eyes, FAM (Japanese Ver)";
+      } else {
+        suggestion = "💿 Try: MIROH, S-Class, Easy";
+      }
+      playlist.innerHTML = `<div class='entry-item'><strong>🎧 SKZ Mood Playlist:</strong> ${suggestion}</div>`;
     }
 
     function updateBackground() {
